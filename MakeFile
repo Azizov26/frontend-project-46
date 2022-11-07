@@ -1,2 +1,4 @@
 gindiff:
 		node bin/bin-gendiff.js
+lint:
+		npx eslint .
