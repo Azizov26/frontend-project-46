@@ -6,7 +6,7 @@ import parse from './parses.js';
 
 const getAbsolutPath = (filepath) => path.resolve(process.cwd(), '_fixtures_', filepath);
 const readfile = (filepath) => fs.readFileSync(getAbsolutPath(filepath), 'utf8');
-const getFormat = (filename) => filename.split('.')[1];
+const getFormat = (filename) => path.extname(filename);
 
 const gendiff = (filepath1, filepath2) => {
   const file1 = readfile(filepath1);
