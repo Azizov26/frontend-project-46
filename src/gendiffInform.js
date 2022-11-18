@@ -10,6 +10,14 @@ const getDiffInformation = (file1, file2) => {
     const valueFile1 = file1[key];
     const valueFile2 = file2[key];
 
+    // if (_.isPlainObject(valueFile1)) {
+    //   return {
+    //     type: 'nested',
+    //     key,
+    //     value: getDiffInformation(valueFile1, valueFile2),
+    //   };
+    // }
+
     if (_.isEqual(valueFile1, valueFile2)) {
       return {
         type: 'nochanges',
