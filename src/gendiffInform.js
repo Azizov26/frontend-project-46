@@ -4,33 +4,17 @@ const getDiffInformation = (file1, file2) => {
   const keys1 = Object.keys(file1);
   const keys2 = Object.keys(file2);
 
-  const FileKeys = _.sortBy(_.union([...keys1, ...keys2]));
+  const FileKeys = _.sortBy(_.union(keys1, keys2));
 
   const result = FileKeys.map((key) => {
     const valueFile1 = file1[key];
     const valueFile2 = file2[key];
 
-    // if (_.isPlainObject(valueFile1)) {
-    //   return {
-    //     type: 'nested',
-    //     key,
-    //     value: getDiffInformation(valueFile1, valueFile2),
-    //   };
-    // }
-
-    if (_.isEqual(valueFile1, valueFile2)) {
+    if (_.isObject(valueFile1) && _.isObject(valueFile2)) {
       return {
-        type: 'nochanges',
+        type: 'nested',
         key,
-        value: valueFile1,
-      };
-    }
-    if (valueFile1 && valueFile2 && valueFile1 !== valueFile2) {
-      return {
-        type: 'changed',
-        key,
-        valueFile1,
-        valueFile2,
+        children: getDiffInformation(valueFile1, valueFile2),
       };
     }
     if (!_.has(file2, key)) {
@@ -47,9 +31,20 @@ const getDiffInformation = (file1, file2) => {
         value: valueFile2,
       };
     }
-    return null;
+    if (!_.isEqual(valueFile1, valueFile2)) {
+      return {
+        type: 'changed',
+        key,
+        value1: valueFile1,
+        value2: valueFile2,
+      };
+    }
+    return {
+      type: 'unchanged',
+      key,
+      value: valueFile1,
+    };
   });
-
   return result;
 };
 export default getDiffInformation;
